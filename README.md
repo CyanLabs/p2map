@@ -2,7 +2,6 @@ Portal 2 Map Launcher
 
 Homepage - http://forgottencoders.co.uk
 Program Homepage - http://forgottencoders.co.uk/p2map
-Issue tracker - http://tracker.forgottencoders.co.uk
 
 Version 1.5
 
