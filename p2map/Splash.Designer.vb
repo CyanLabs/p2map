@@ -64,11 +64,11 @@ Partial Class Splash
         Me.LBLVersion.BackColor = System.Drawing.Color.Black
         Me.LBLVersion.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LBLVersion.ForeColor = System.Drawing.Color.White
-        Me.LBLVersion.Location = New System.Drawing.Point(81, 115)
+        Me.LBLVersion.Location = New System.Drawing.Point(66, 115)
         Me.LBLVersion.Name = "LBLVersion"
-        Me.LBLVersion.Size = New System.Drawing.Size(78, 15)
+        Me.LBLVersion.Size = New System.Drawing.Size(92, 15)
         Me.LBLVersion.TabIndex = 2
-        Me.LBLVersion.Text = "version 1.X"
+        Me.LBLVersion.Text = "version X.X.X"
         Me.LBLVersion.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Splash

@@ -34,7 +34,7 @@ Partial Class Instructions
         Me.RTBInstructions.Name = "RTBInstructions"
         Me.RTBInstructions.ReadOnly = True
         Me.RTBInstructions.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Horizontal
-        Me.RTBInstructions.Size = New System.Drawing.Size(226, 193)
+        Me.RTBInstructions.Size = New System.Drawing.Size(222, 193)
         Me.RTBInstructions.TabIndex = 0
         Me.RTBInstructions.Text = resources.GetString("RTBInstructions.Text")
         Me.RTBInstructions.WordWrap = False
@@ -42,9 +42,9 @@ Partial Class Instructions
         'BTNCloseInstructions
         '
         Me.BTNCloseInstructions.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.BTNCloseInstructions.Location = New System.Drawing.Point(0, 192)
+        Me.BTNCloseInstructions.Location = New System.Drawing.Point(0, 188)
         Me.BTNCloseInstructions.Name = "BTNCloseInstructions"
-        Me.BTNCloseInstructions.Size = New System.Drawing.Size(226, 23)
+        Me.BTNCloseInstructions.Size = New System.Drawing.Size(222, 23)
         Me.BTNCloseInstructions.TabIndex = 1
         Me.BTNCloseInstructions.Text = "Close Instructions"
         Me.BTNCloseInstructions.UseVisualStyleBackColor = True
@@ -53,7 +53,7 @@ Partial Class Instructions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(226, 215)
+        Me.ClientSize = New System.Drawing.Size(222, 211)
         Me.ControlBox = False
         Me.Controls.Add(Me.BTNCloseInstructions)
         Me.Controls.Add(Me.RTBInstructions)

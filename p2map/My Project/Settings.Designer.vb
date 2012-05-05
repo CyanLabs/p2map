@@ -128,18 +128,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property SplitScreenChk() As Boolean
-            Get
-                Return CType(Me("SplitScreenChk"),Boolean)
-            End Get
-            Set
-                Me("SplitScreenChk") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property p2location() As String
             Get
@@ -147,6 +135,30 @@ Namespace My
             End Get
             Set
                 Me("p2location") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property OtherChk() As Boolean
+            Get
+                Return CType(Me("OtherChk"),Boolean)
+            End Get
+            Set
+                Me("OtherChk") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property OtherCustomChk() As Boolean
+            Get
+                Return CType(Me("OtherCustomChk"),Boolean)
+            End Get
+            Set
+                Me("OtherCustomChk") = value
             End Set
         End Property
     End Class

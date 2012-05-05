@@ -8,7 +8,7 @@ Imports Microsoft.Win32
 Public Class Home
     Private Declare Function GetAsyncKeyState Lib "user32" (ByVal vkey As Long) As Integer 'used for global keybinds
     Dim REGLocation As String, REGLocation1 As String, REGMapLocation As String, REGDLCMAPlocation As String
-    Dim ARYOtherMaps As New List(Of String), ARYCustomMPMaps As New List(Of String), ARYCustomSPMaps As New List(Of String), mapname As String
+    Dim ARYOtherMaps As New List(Of String), ARYCustomMPMaps As New List(Of String), ARYCustomSPMaps As New List(Of String), ARYCustomOtherMaps As New List(Of String), mapname As String
     Dim ARYAllMaps As New List(Of String), mapcmd As String, diar1 As IO.FileInfo(), hotkey As Boolean, noclipp1 As Boolean, noclipp2 As Boolean, svcheats As Boolean
     Dim defaultparameters As String = "-windowed -noborder -console -novid +gameui_hide "
     Dim ARYStockSPMaps() As String = {
@@ -35,8 +35,9 @@ Public Class Home
     "aa1.bsp", "aa1a.bsp", "aa2.bsp", "aa3.bsp", "ab1.bsp", "ab12.bsp", "background1.bsp", "bb1.bsp", "bb2.bsp",
     "borealis1.bsp", "borealis2.bsp", "borealis3.bsp", "borealis4.bsp", "borealis5.bsp", "cc1.bsp", "cc2.bsp", "e1912.bsp"
     }
-    Dim serverkilled As Boolean
+    Dim serverkilled As Boolean = True
     Dim lastmapaccess As Date
+    Dim regeneratemaplist As String
 
     Private Sub Home_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If My.Settings.disablesplash = True Then
@@ -67,39 +68,35 @@ Public Class Home
         Dim di As New IO.DirectoryInfo(REGMapLocation)
         diar1 = di.GetFiles("*.bsp")
         Timer1.Start()
-        VersionXXToolStripMenuItem.Text = "Version " + My.Application.Info.Version.Major.ToString + "." + My.Application.Info.Version.Minor.ToString
+        VersionXXToolStripMenuItem.Text = "Version " + My.Application.Info.Version.Major.ToString + "." + My.Application.Info.Version.Minor.ToString + "." + My.Application.Info.Version.Build.ToString
         lastmapaccess = IO.File.GetLastAccessTime(REGMapLocation)
     End Sub
 
     Private Sub BTNLaunch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BTNLaunch.Click
-        If ListBox2.SelectedItem = Nothing Then
+        If LSTFilteredMapList.SelectedItem = Nothing Then
             mapname = DDNMaps.SelectedItem.ToString.Replace(".bsp", "")
         Else
-            mapname = ListBox2.SelectedItem.ToString.Replace(".bsp", "")
+            mapname = LSTFilteredMapList.SelectedItem.ToString.Replace(".bsp", "")
         End If
-        If mapname.Contains("sp_") Then
-            P2Hijacker(defaultparameters + "+map", mapname)
-        ElseIf mapname.Contains("mp_coop_") Then
-            If IsProcessRunning("portal2") = True Then
+        If mapname.Contains("mp_coop_") Then
+            If CHKSplitScreen.Checked = True Then
                 If serverkilled = True Then
-                    If CHKSplitScreen.Checked = True Then
-                        P2Hijacker(defaultparameters + "+ss_map", mapname)
-                    Else
-                        P2Hijacker(defaultparameters + "+map", mapname)
-                    End If
-                    serverkilled = False
+                    P2Hijacker(defaultparameters + "+killserver +ss_map", mapname)
                 Else
                     P2Hijacker(defaultparameters + "+changelevel", mapname)
                 End If
-
-
-            ElseIf CHKSplitScreen.Checked = True Then
-                P2Hijacker(defaultparameters + "ss_map", mapname)
             Else
-                P2Hijacker(defaultparameters + "+map", mapname)
+                If serverkilled = True Then
+                    P2Hijacker(defaultparameters + "+killserver +map", mapname)
+                Else
+                    P2Hijacker(defaultparameters + "+changelevel", mapname)
+                End If
             End If
-
+            serverkilled = False
+        Else
+            P2Hijacker(defaultparameters + "+map", mapname)
         End If
+
         Me.WindowState = FormWindowState.Minimized
     End Sub
 
@@ -117,54 +114,76 @@ Public Class Home
             DDNMaps.Items.Remove(line)
         Next
     End Sub
-
-
     Private Sub DDNMaps_MouseClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DDNMaps.MouseClick
-        DDNMaps.Items.Clear()
         MapListGenerator()
         RemoveDuplicates(DDNMaps)
-        ListBox2.Items.Clear()
+        LSTFilteredMapList.Items.Clear()
     End Sub
 
     Public Sub MapListGenerator()
 
-        If CHKDefaultSoloMaps.Checked = True Then
-            AddMapToList(ARYStockSPMaps)
-        End If
+        If regeneratemaplist = True Then
+            DDNMaps.Items.Clear()
+            LSTFilteredMapList.Items.Clear()
+            If CHKDefaultSoloMaps.Checked = True Then
+                AddMapToList(ARYStockSPMaps)
+            End If
 
-        If CHKDefaultMPMaps.Checked = True Then
-            AddMapToList(ARYStockMPMaps)
-        End If
+            If CHKDefaultMPMaps.Checked = True Then
+                AddMapToList(ARYStockMPMaps)
+            End If
 
-        If CHKDLCMaps.Checked = True Then
-            AddMapToList(ARYDLCMaps)
-        End If
+            If CHKOtherMaps.Checked = True Then
+                AddMapToList(ARYOtherFiles)
+            End If
 
-        If CHKCustomSoloMaps.Checked = True Then
-            For Each file In diar1
-                If file.ToString.Contains("sp_") Then
-                    DDNMaps.Items.Add(file.ToString)
-                    ARYCustomSPMaps.Add(file.ToString)
-                    If CHKDefaultSoloMaps.Checked = False Then
-                        RemoveMapFromList(ARYStockSPMaps)
+            If CHKDLCMaps.Checked = True Then
+                AddMapToList(ARYDLCMaps)
+            End If
+
+            If CHKCustomSoloMaps.Checked = True Then
+                For Each file In diar1
+                    If file.ToString.Contains("sp_") Then
+                        DDNMaps.Items.Add(file.ToString)
+                        ARYCustomSPMaps.Add(file.ToString)
+                        If CHKDefaultSoloMaps.Checked = False Then
+                            RemoveMapFromList(ARYStockSPMaps)
+                        End If
+                    Else
                     End If
-                Else
-                End If
-            Next
+                Next
+            End If
+
+            If CHKCustomMPMaps.Checked = True Then
+                For Each file In diar1
+                    If file.ToString.Contains("mp_coop_") Then
+                        ARYCustomMPMaps.Add(file.ToString)
+                        DDNMaps.Items.Add(file.ToString)
+                        If CHKDefaultMPMaps.Checked = False Then
+                            RemoveMapFromList(ARYStockMPMaps)
+                        End If
+                    Else
+                    End If
+                Next
+            End If
+
+            If CHKCustomOtherMaps.Checked = True Then
+                For Each file In diar1
+                    If Not file.ToString.Contains("mp_coop_") Then
+                        If Not file.ToString.Contains("sp_") Then
+                            ARYCustomOtherMaps.Add(file.ToString)
+                            DDNMaps.Items.Add(file.ToString)
+                            If CHKOtherMaps.Checked = False Then
+                                RemoveMapFromList(ARYOtherFiles)
+                            End If
+                        End If
+                    End If
+                Next
+            End If
+            regeneratemaplist = False
+            RemoveDuplicates(DDNMaps)
         End If
 
-        If CHKCustomMPMaps.Checked = True Then
-            For Each file In diar1
-                If file.ToString.Contains("mp_coop_") Then
-                    ARYCustomMPMaps.Add(file.ToString)
-                    DDNMaps.Items.Add(file.ToString)
-                    If CHKDefaultMPMaps.Checked = False Then
-                        RemoveMapFromList(ARYStockMPMaps)
-                    End If
-                Else
-                End If
-            Next
-        End If
     End Sub
 
     'the public function for checking if process running.
@@ -192,7 +211,7 @@ Public Class Home
         If Not IO.File.GetLastAccessTime(REGMapLocation) = lastmapaccess Then
             Dim di As New IO.DirectoryInfo(REGMapLocation)
             diar1 = di.GetFiles("*.bsp")
-            ListBox2.Items.Clear()
+            LSTFilteredMapList.Items.Clear()
             DDNMaps.Items.Clear()
             MapListGenerator()
             lastmapaccess = IO.File.GetLastAccessTime(REGMapLocation)
@@ -212,10 +231,7 @@ Public Class Home
     End Sub
     'check if you playing in splitscreen or in network.
     Private Sub CHKSplitScreen_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKSplitScreen.CheckedChanged
-        If IsProcessRunning("portal2") = True Then
-            P2Hijacker("+killserver")
-            serverkilled = True
-        End If
+        serverkilled = True
     End Sub
     'show instructions.
     Private Sub ContentsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContentsToolStripMenuItem.Click
@@ -283,16 +299,18 @@ Public Class Home
 
     Private Sub FilterTxt_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FilterTxt.TextChanged
         If FilterTxt.Text = "" Then
-            ListBox2.Items.Clear()
+            LSTFilteredMapList.Items.Clear()
         Else
-            For Each line In DDNMaps.Items
-                If line.ToString.Contains(filtertxt.Text) Then
-                    ListBox2.Items.Add(line)
-                Else
-                    ListBox2.Items.Remove(line)
-                End If
-            Next
-            RemoveDuplicates(ListBox2)
+            If Len(FilterTxt.Text) > 2 Then
+                For Each line In DDNMaps.Items
+                    If line.ToString.Contains(FilterTxt.Text) Then
+                        LSTFilteredMapList.Items.Add(line)
+                    Else
+                        LSTFilteredMapList.Items.Remove(line)
+                    End If
+                Next
+                RemoveDuplicates(LSTFilteredMapList)
+            End If
         End If
     End Sub
 
@@ -302,5 +320,38 @@ Public Class Home
 
     Private Sub Home_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
         My.Settings.Save()
+    End Sub
+
+    Private Sub DeveloperLinkLabel_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles DeveloperLinkLabel.LinkClicked
+        Process.Start("http://forgottencoders.co.uk/p2map")
+    End Sub
+
+    'most likely a more efficient way to do this lol but for now this will do the job.
+    Private Sub CHKDefaultSoloMaps_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKDefaultSoloMaps.CheckedChanged
+        regeneratemaplist = True
+    End Sub
+
+    Private Sub CHKDLCMaps_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKDLCMaps.CheckedChanged
+        regeneratemaplist = True
+    End Sub
+
+    Private Sub CHKDefaultMPMaps_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKDefaultMPMaps.CheckedChanged
+        regeneratemaplist = True
+    End Sub
+
+    Private Sub CHKOtherMaps_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKOtherMaps.CheckedChanged
+        regeneratemaplist = True
+    End Sub
+
+    Private Sub CHKCustomSoloMaps_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKCustomSoloMaps.CheckedChanged
+        regeneratemaplist = True
+    End Sub
+
+    Private Sub CHKCustomMPMaps_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKCustomMPMaps.CheckedChanged
+        regeneratemaplist = True
+    End Sub
+
+    Private Sub CHKCustomOtherMaps_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CHKCustomOtherMaps.CheckedChanged
+        regeneratemaplist = True
     End Sub
 End Class
