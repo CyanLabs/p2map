@@ -3,7 +3,7 @@ Portal 2 Map Launcher
 Homepage - http://forgottencoders.co.uk
 Program Homepage - http://forgottencoders.co.uk/p2map
 
-Version 1.5
+Version 1.6
 
 ---------------------------------------------------------------------------------------------------
 
@@ -40,6 +40,23 @@ Changing map
 ---------------------------------------------------------------------------------------------------
 
 Changelog:
+
+V1.6.0
+
+* Added a function to prevent re-generating the list when checkbox not changed
+* Changed the detection of Solo and Mp Maps.
+* Some behind the scenes changes
+
+v1.5.1 Bug fix. (never released)
+
+* Fixed Splitscreen Bug
+* Prevented filtering the maps unless atleast 3 characters are entered
+* First GitHub release.
+* Changed layout of the checkboxes
+* Added 2 more checkboxes (Other Maps)
+* Changed Tooltips Slightly
+* Now Using a three numbered version system (X.X.X rather than X.X)
+* Issue Tracker is now on GitHub.
 
 v1.5
 
