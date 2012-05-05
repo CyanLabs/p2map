@@ -15,9 +15,8 @@ obj/
 *.sln.docstates
 
 # Build results
-[Dd]ebug/*
-[Rr]elease/*
-[Oo]bj/*
+[Dd]ebug/
+[Rr]elease/
 x64/
 *_i.c
 *_p.c
