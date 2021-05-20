@@ -1,7 +1,7 @@
 Portal 2 Map Launcher
 
-Homepage - http://forgottencoders.co.uk
-Program Homepage - http://forgottencoders.co.uk/p2map
+Homepage - https://cyanlabs.net
+Program Homepage - https://cyanlabs.net/applications/portal-2-map-launcher/
 
 Version 1.6
 
@@ -11,7 +11,7 @@ Description:
 
 Portal 2 map launcher is a simple but effective GUI for loading custom and stock portal 2 maps.
 
-It doesn’t matter if you want to load them as solo, splitscreen, or online/lan, portal 2 map launcher will launch it.
+It doesnâ€™t matter if you want to load them as solo, splitscreen, or online/lan, portal 2 map launcher will launch it.
 
 It has many advanced features such as changing map when ingame and skipping the intro of the game.
 
