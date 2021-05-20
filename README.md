@@ -1,6 +1,9 @@
+Due to PeTi this is no longer needed, this repo has now been archived.
+
 Portal 2 Map Launcher
 
 Homepage - https://cyanlabs.net
+
 Program Homepage - https://cyanlabs.net/applications/portal-2-map-launcher/
 
 Version 1.6
